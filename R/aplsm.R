@@ -26,27 +26,27 @@
 #' a=aplsm(Niter=10,Y.i, Y.ia, D=2, type="DD")
 
 
-aplsm<-function(Niter,Y.i, Y.ia,D, type){
-  M=ncol(Y.ia)
-  N=ncol(Y.i)
-    d <- dist(t(Y.ia))
-    fit <- cmdscale(d,eig=TRUE, k=D)
-    Z.a= fit$points
+aplsm=function (Niter, Y.i, Y.ia, D, type) 
+{
+  M = ncol(Y.ia)
+  N = ncol(Y.i)
 
-    ZsMat=list("Z.i" = lsm(Y.i,D=D)$lsmEZ,"Z.a" = Z.a)
-    if(type == "DD"){
-      lsmhMat<-DDlsmh(Niter,Y.i,Y.ia,M,N,D,ZsMat)
-    }
+  Z.a = cmdscale(dist(t(Y.ia)), eig = TRUE, k = D)$points
+  
 
-    if(type == "DV"){
-      lsmhMat<-DVlsmh(Niter,Y.i,Y.ia,M,N,D,ZsMat)
-    }
-    if(type == "VV"){
-      lsmhMat<-VVlsmh(Niter,Y.i,Y.ia,M,N,D,ZsMat)
-    }
-
-
+  Z.i = cmdscale(dist(Y.ia), eig = TRUE, k = D)$points
+  
+  
+  ZsMat = list(Z.i = Z.i, Z.a = Z.a)
+  if (type == "DD") {
+    lsmhMat <- DDlsmh(Niter, Y.i, Y.ia, M, N, D, ZsMat)
+  }
+  if (type == "DV") {
+    lsmhMat <- DVlsmh(Niter, Y.i, Y.ia, M, N, D, ZsMat)
+  }
+  if (type == "VV") {
+    lsmhMat <- VVlsmh(Niter, Y.i, Y.ia, M, N, D, ZsMat)
+  }
   return(lsmhMat)
-
-
 }
+
