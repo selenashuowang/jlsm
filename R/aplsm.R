@@ -31,30 +31,13 @@ aplsm<-function(Niter,Y.i, Y.ia,D, type){
   N=ncol(Y.i)
 
 
-  if(D %in% 2:3){ # Fruchterman-Reingold
 
-    Z.i <- layout.fruchterman.reingold(graph.adjacency(Y.i), dim = D)
-    Z.i <- Z.i / apply(Z.i, 2, sd)
-    Lambda.0 <- diag(D)
-
-    Z.a=layout.fruchterman.reingold(graph_from_incidence_matrix(Y.ia), dim = D)
-    Z.a <- Z.a / apply(Z.a, 2, sd)
-    Z.a = Z.a[(N+1):(N+M),]
-    Lambda.1 <- diag(D)
-
-
-  } else { # Multidimensional Scaling
-    Z.i<-cmdscale(as.dist(1-Y.i), D)
-    Lambda.0<-diag(D)
 
     Z.a<-cmdscale(dist(t(Y.ia)),eig=TRUE, k=D)
-    Lambda.1<-diag(D)
-  }
 
 
 
-
-    ZsMat=list("Z.i" = Z.i,"Z.a" = Z.a)
+    ZsMat=list("Z.i" = lsm(Y.i,D)$lsmEZ,"Z.a" = Z.a)
     if(type == "DD"){
       lsmhMat<-DDlsmh(Niter,Y.i,Y.ia,M,N,D,ZsMat)
     }
