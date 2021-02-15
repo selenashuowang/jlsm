@@ -4,8 +4,8 @@ DDlsmh<-function(Niter,Y.i,Y.ia,M,N,D,Zs){
   mxzmatKL.new[1,]=10000000
 
 
-  Lambda.0=diag(D)*.0001
-  Lambda.1=diag(D)*.0001
+  Lambda.0=diag(D)
+  Lambda.1=diag(D)
   Z.i=Zs$Z.i
   Z.a=Zs$Z.a
 
@@ -25,20 +25,12 @@ DDlsmh<-function(Niter,Y.i,Y.ia,M,N,D,Zs){
     alpha.1=DDupalpha.1(alpha.1, B, Y.ia, Z.i, Z.a)
     Lambda.0=DDupLambda.0(alpha.0, alpha.1, C,B,  Y.i, Y.ia, cont.i, Z.i, Z.a, Lambda.0, Lambda.1 ,p.lambda.0=1)
 
-    Lambda.0[upper.tri(Lambda.0)] <- t(Lambda.0)[upper.tri(t(Lambda.0))]
-
-    if(!is.positive.definite(Lambda.0)){
-      Lambda.0= nearPD(Lambda.0)$mat
-    }
+   
     B=solve(diag(D) + 2*Lambda.0 + 2 * Lambda.1)
 
     Lambda.1=DDupLambda.1.ia( alpha.1, B, Y.ia,  Z.i, Z.a, Lambda.0, Lambda.1 ,p.lambda.1=1)
 
-    Lambda.1[upper.tri(Lambda.1)] <- t(Lambda.1)[upper.tri(t(Lambda.1))]
-
-    if(!is.positive.definite(Lambda.1)){
-      Lambda.1= nearPD(Lambda.1)$mat
-    }
+ 
 
     Z.i=DDgetZ.i.t(Y.i,Y.ia, Lambda.0,Lambda.1,Z.i, Z.a,alpha.0,p.lambda.0=1,alpha.1)
 
