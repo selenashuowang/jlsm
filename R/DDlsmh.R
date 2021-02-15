@@ -39,9 +39,24 @@ DDlsmh<-function(Niter,Y.i,Y.ia,M,N,D,Zs){
     if(!is.positive.definite(Lambda.1)){
       Lambda.1= nearPD(Lambda.1)$mat
     }
-
+    
     Z.i=DDgetZ.i.t(Y.i,Y.ia, Lambda.0,Lambda.1,Z.i, Z.a,alpha.0,p.lambda.0=1,alpha.1)
+
+
+    while (max(abs(range(Z.i)))>10 & times<20){
+      Z.i=DDgetZ.i.t(Y.i,Y.ia, Lambda.0,Lambda.1,Z.i, Z.a,alpha.0,p.lambda.0=1,alpha.1)
+      times=times+1
+
+    }
+
     Z.a=DDgetZ.a.t.i.ia(Y.i,Y.ia, Lambda.0,Lambda.1,Z.i,Z.a,p.lambda.1=1,alpha.1)
+
+    while (max(abs(range(Z.a)))>10 & times<20){
+      Z.a=DDgetZ.a.t.i.ia(Y.i,Y.ia, Lambda.0,Lambda.1,Z.i,Z.a,p.lambda.1=1,alpha.1)
+      times=times+1
+
+    }
+
     mxzmatKL.new[i,1]=DDKL(alpha.0,  alpha.1, Lambda.0,Lambda.1, Z.i,Z.a, Y.i,Y.ia)
     dis.new=sum(mxzmatKL.new[i,1])/sum(mxzmatKL.new[i-1,1])
     i=i+1
