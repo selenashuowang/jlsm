@@ -32,21 +32,24 @@ aplsm<-function(Niter,Y.i, Y.ia,D, type){
 
 
 
-
     Z.a<-cmdscale(dist(t(Y.ia)),eig=TRUE, k=D)$points
 
+    Z.i <- matrix(rnorm(N * D), ncol = D)
+
+    #Z.i <- lsm(Y.i,D)$lsmEZ
 
 
-    ZsMat=list("Z.i" = lsm(Y.i,D)$lsmEZ,"Z.a" = Z.a)
+
+    Zs=list("Z.i" = Z.i,"Z.a" = Z.a)
     if(type == "DD"){
-      lsmhMat<-DDlsmh(Niter,Y.i,Y.ia,M,N,D,ZsMat)
+      lsmhMat<-DDlsmh(Niter,Y.i,Y.ia,M,N,D,Zs)
     }
 
     if(type == "DV"){
-      lsmhMat<-DVlsmh(Niter,Y.i,Y.ia,M,N,D,ZsMat)
+      lsmhMat<-DVlsmh(Niter,Y.i,Y.ia,M,N,D,Zs)
     }
     if(type == "VV"){
-      lsmhMat<-VVlsmh(Niter,Y.i,Y.ia,M,N,D,ZsMat)
+      lsmhMat<-VVlsmh(Niter,Y.i,Y.ia,M,N,D,Zs)
     }
 
 
