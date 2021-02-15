@@ -33,7 +33,7 @@ aplsm<-function(Niter,Y.i, Y.ia,D, type){
 
 
 
-    Z.a<-cmdscale(dist(t(Y.ia)),eig=TRUE, k=D)
+    Z.a<-cmdscale(dist(t(Y.ia)),eig=TRUE, k=D)$points
 
 
 
